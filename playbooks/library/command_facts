@@ -1,0 +1,47 @@
+#!/usr/bin/env perl
+
+# WANT_JSON
+use strict;
+no warnings;
+
+use JSON qw/ to_json from_json /;
+
+open my $fh, '<', shift;
+
+my $config = from_json join '', <$fh>;
+
+my $program = $config->{program};
+my $args = $config->{version_args};
+
+my %facts = (
+    target_version => $config->{target_version}
+);
+
+chomp( $facts{location} = `which $program` );
+
+sub numify {
+    my $num = 0;
+
+    $num = $num * 1_000 + $_ for $_[0] =~ /(\d+)/g;
+
+    return $num;
+}
+
+if( $facts{location} ) {
+    ($facts{version}) = `$program $args`;
+    chomp $facts{version};
+    $facts{version} =~ /([0-9.]+)/;
+    $facts{version} = $1 if $1;
+    $facts{num_version} = numify($facts{version});
+}
+
+$facts{num_version} ||= 0;
+
+$facts{changed} = $facts{version} eq $config->{target_version} ? JSON::false : JSON::true;
+
+$facts{needs_upgrade} = $facts{num_version} < numify($config->{target_version}) ? JSON::true : JSON::false;
+
+
+print to_json \%facts;
+
+exit;

@@ -1,0 +1,2 @@
+nodenv:
+  dir: '{{ansible_user_dir}}/.nodenv'

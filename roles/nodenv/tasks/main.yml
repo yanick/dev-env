@@ -1,0 +1,36 @@
+- git:
+    dest: '{{nodenv.dir}}'
+    repo: https://github.com/nodenv/nodenv.git
+    update: yes
+
+- name: compile dynamic bash extensions
+  shell: src/configure chdir={{nodenv.dir}}
+- shell: make -C src   chdir={{nodenv.dir}}
+
+- name: is already in fish path?
+  shell: fish --command="contains {{nodenv.dir}}/bin ( string split0 \$fish_user_paths)"
+  register: has_nodenvpath
+  ignore_errors: true
+
+- name: add to fish path
+  shell: fish --command="set -Ux -p fish_user_paths {{nodenv.dir}}/bin"
+  when: has_nodenvpath.failed
+
+- name: enable nodenv in fish
+  lineinfile:
+    path: '{{ansible_user_dir}}/.config/fish/config.fish'
+    create: no
+    regexp: nodenv init
+    backup: yes
+    line: status --is-interactive; and source (nodenv init -|psub)
+
+- name: create plugin dir
+  file:
+    path: '{{nodenv.dir}}/plugins'
+    state: directory
+
+- name: nodenv install
+  git:
+    dest: '{{nodenv.dir}}/plugins/node-build'
+    repo: https://github.com/nodenv/node-build.git
+    update: yes

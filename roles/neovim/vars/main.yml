@@ -1,0 +1,3 @@
+nvim:
+  workdir: /tmp/neovim
+  target_version: v0.4.3

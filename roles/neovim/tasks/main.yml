@@ -1,0 +1,25 @@
+---
+- apt:
+    name: [ python-dev, python-pip, python3-dev, python3-pip, xclip ]
+    force_apt_get: true
+    state: latest
+  become: yes
+  name: apt dependencies
+
+- pip: name=neovim executable=pip3
+  name: python package
+  become: yes
+
+- command_facts:
+    program: nvim
+    version_args: --version
+    target_version: '{{nvim.target_version}}'
+  register: local_nvim
+  ignore_errors: true
+  check_mode: no
+
+- debug: var=local_nvim
+
+- include_tasks:
+    file: ./build_neovim.yml
+  when: local_nvim.needs_upgrade

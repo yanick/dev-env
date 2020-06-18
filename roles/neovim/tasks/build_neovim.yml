@@ -1,0 +1,22 @@
+- git:
+    dest: '{{nvim.workdir}}'
+    repo: https://github.com/neovim/neovim.git
+    version: '{{nvim.target_version}}'
+
+- apt:
+    name: [ libtool, libtool-bin, gettext ]
+    force_apt_get: true
+    state: latest
+  become: yes
+  name: apt dependencies
+
+- shell: make CMAKE_BUILD_TYPE=Release
+  args:
+    chdir: "{{ nvim.workdir }}"
+  name: make neovim
+
+- shell: make install
+  args:
+    chdir: "{{ nvim.workdir }}"
+  name: install neovim
+  become: yes

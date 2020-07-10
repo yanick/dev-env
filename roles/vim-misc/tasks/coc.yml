@@ -1,0 +1,27 @@
+- include_role: { name: vim-plugged-plugin }
+  vars:
+    plugin: neoclide/coc.nvim 
+    additional_args: ", {'branch': 'release'}"
+
+- name: backup
+  lineinfile:
+    path: "{{vimrc}}"
+    regexp: "^\\s*set (no)?writebackup"
+    line: set nowritebackup " coc - Some servers have issues with backup files, see #649.
+    backup: yes
+  
+- name: backup2
+  lineinfile:
+    path: "{{vimrc}}"
+    regexp: "^\\s*set (no)?backup"
+    line: set nobackup " coc - Some servers have issues with backup files, see #649.
+    backup: yes
+  
+- name: coc main config
+  blockinfile:
+    path: "{{vimrc}}"
+    backup: yes 
+    marker: '" {mark} coc main config'
+    marker_begin: "{{ '{{{' }}"
+    marker_end: '}}}'
+    block: "{{ lookup('file', '../files/config.vim')}}"

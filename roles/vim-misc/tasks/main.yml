@@ -1,0 +1,44 @@
+- name: vinegar
+  include_role:
+    name: vim-plugged-plugin
+  vars:
+    plugin: tpope/vim-vinegar
+
+- name: brace shortcuts
+  blockinfile:
+    path: "{{ansible_user_dir}}/.config/nvim/init.vim"
+    backup: yes 
+    marker: '" {mark} brace shortcuts'
+    marker_begin: "{{ '{{{' }}"
+    marker_end: '}}}'
+    block: |
+      inoremap (( ()<C-c>i
+      inoremap [[ []<C-c>i
+      inoremap \{\{ {}<C-c>i
+
+      inoremap ((( (<CR>)<C-c>O
+      inoremap [[[ [<CR>]<C-c>O
+      inoremap \{\{\{ {<CR>}<C-c>O
+
+
+- name: ultisnip 
+  include_role: { name: vim-plugged-plugin }
+  vars:
+    plugin: SirVer/ultisnips
+
+- include_role: { name: vim-plugged-plugin }
+  vars:
+    plugin: pearofducks/ansible-vim
+
+- name: ultisnip config 
+  blockinfile:
+    path: "{{ansible_user_dir}}/.config/nvim/init.vim"
+    backup: yes 
+    marker: '" {mark} ultisnip config'
+    marker_begin: "{{ '{{{' }}"
+    marker_end: '}}}'
+    block: |
+      let g:UltiSnipsSnippetDirectories = [ 'UltiSnips' ]
+      let g:UltiSnipsEditSplit='vertical'
+
+- include_tasks: { file: ./coc.yml }

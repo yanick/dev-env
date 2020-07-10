@@ -1,0 +1,2 @@
+vimrc: "{{ansible_user_dir}}/.config/nvim/init.vim"
+additional_args: ""

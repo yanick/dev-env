@@ -1,0 +1,16 @@
+---
+- name: check for installed gh
+  command_facts:
+    program: gh
+    version_args: --version
+    target_version: 1.0.0
+  register: installed_gh
+  ignore_errors: true
+  check_mode: no
+
+- debug:
+    var: installed_gh
+
+- name: install new gh
+  when: installed_gh.needs_upgrade
+  import_tasks: install.yml

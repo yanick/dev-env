@@ -1,3 +1,10 @@
+- name: install commands
+  copy:
+    backup: yes
+    src: ../files/git-cm
+    dest: "{{ansible_user_dir}}/bin/git-cm"
+    mode: u+x
+
 - name: gitka
   lineinfile:
     path: "{{ansible_user_dir}}/.config/fish/config.fish"

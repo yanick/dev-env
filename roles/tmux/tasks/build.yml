@@ -1,0 +1,31 @@
+- name: get the tarball
+  vars:
+  get_url:
+    dest: /tmp/tmux-3.1b.tar.gz
+    url: https://github.com/tmux/tmux/releases/download/3.1b/tmux-3.1b.tar.gz
+
+- name: install dependencies
+  apt:
+    name: libevent-dev
+
+- name: set workdir
+  set_fact: workdir=/tmp/tmux3.1b
+
+- name: unarchive
+  unarchive:
+    src: /tmp/tmux-3.1b.tar.gz
+    dest: /tmp
+    creates: '{{workdir}}/CHANGES'
+
+- shell: configure
+  args:
+    chdir: '{{workdir}}'
+
+- shell: make
+  args:
+    chdir: '{{workdir}}'
+
+- shell: make install
+  become: yes
+  args:
+    chdir: '{{workdir}}'

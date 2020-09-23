@@ -1,0 +1,13 @@
+- command_facts:
+    program: tmux
+    version_args: -V
+    target_version: '3.1b'
+  register: installed
+  ignore_errors: true
+  check_mode: no
+
+- debug: var=installed
+
+- include_tasks:
+    file: ./build.yml
+  when: installed.needs_upgrade

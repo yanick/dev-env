@@ -1,0 +1,7 @@
+- name: default branch
+  lineinfile:
+    path: '{{ansible_user_dir}}/.gitconfig'
+    insertafter: '[init]'
+    backup: yes
+    line: '    defaultBranch = main'
+

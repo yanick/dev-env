@@ -1,0 +1,8 @@
+- name: aliases
+  lineinfile:
+    path: "{{ansible_user_dir}}/.gitconfig"
+    line:  "    {{item.key}} = {{item.value}}"
+    regex: "    {{item.key}} = "
+    backup: yes
+    insertafter: '\[alias\]'
+  loop: "{{ aliases | dict2items }}"

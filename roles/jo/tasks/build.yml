@@ -1,0 +1,28 @@
+
+- name: set work directory
+  set_fact:
+    jo_work_dir: /tmp/jo-{{jo_target_version}}
+
+- name: fetch source
+  unarchive:
+    src: https://github.com/jpmens/jo/releases/download/{{jo_target_version}}/jo-{{jo_target_version}}.tar.gz
+    remote_src: true
+    dest: /tmp
+    creates: "{{jo_work_dir}}/README"
+
+- shell: autoreconf -i
+  args:
+    chdir: "{{ jo_work_dir }}"
+
+- shell: ./configure --prefix {{ install_prefix }}
+  args:
+    chdir: "{{ jo_work_dir }}"
+
+- shell: make check
+  args:
+    chdir: "{{ jo_work_dir }}"
+
+- shell: make install
+  become: '{{ install_become }}'
+  args:
+    chdir: "{{ jo_work_dir }}"

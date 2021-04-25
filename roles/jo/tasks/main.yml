@@ -1,0 +1,16 @@
+---
+- name: check for installed version
+  command_facts:
+    program: jo
+    version_args: -v
+    target_version: "{{jo.target_version}}"
+  register: installed_jo
+  ignore_errors: true
+  check_mode: no
+
+- debug:
+    msg: "local jo: {{ installed_jo }}"
+
+- include_tasks:
+    file: ./build.yml
+  when: installed_jo.needs_upgrade

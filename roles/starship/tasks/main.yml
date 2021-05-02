@@ -1,0 +1,20 @@
+- command_facts:
+    program: starship
+    version_args: --version
+    target_version: 0.52.1
+  register: installed
+
+- debug: var=installed
+
+- when: installed.needs_upgrade
+  import_tasks: ./install.yml
+
+- name: config file
+  copy:
+    src: ../files/starship.toml
+    dest: '{{ansible_env.HOME}}/.config/starship.toml'
+
+- name: fish config
+  lineinfile:
+    path: '{{ansible_env.HOME}}/.config/fish/config.fish'
+    line: status --is-interactive; and source ("/usr/local/bin/starship" init fish --print-full-init | psub)

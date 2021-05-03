@@ -1,0 +1,6 @@
+- get_url:
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
+    dest: /tmp/nvm-install.sh
+    mode: u+rwx
+
+- shell: /tmp/nvm-install.sh

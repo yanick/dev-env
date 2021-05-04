@@ -1,5 +1,7 @@
-- hosts: localhost
+- hosts:
+    - enkidu
   tasks:
       - import_role: { name: jo }
       - import_role: { name: starship }
+      - import_role: { name: colorpedia }
       - import_role: { name: ripgrep }

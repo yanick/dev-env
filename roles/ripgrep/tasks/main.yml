@@ -1,0 +1,6 @@
+- when: ansible_facts['distribution'] == 'Ubuntu'
+  apt: { name: ripgrep }
+  become: yes
+
+- when: ansible_facts['distribution'] == 'MacOS'
+  homebrew: { name: ripgrep }

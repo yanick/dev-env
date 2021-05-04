@@ -1,0 +1,23 @@
+- command_facts:
+    program: kitty
+    version_args: --version
+    target_version: "{{kitty_target_version}}"
+  register: installed
+  ignore_errors: true
+  check_mode: no
+
+- debug: var=installed
+
+- when: installed.needs_upgrade
+  import_tasks: ./build_kitty.yml
+
+
+- name: copy configs
+  copy:
+    dest: '{{ansible_user_dir}}/.config/kitty/{{item | basename }}'
+    src: '{{item}}'
+    force: no
+    backup: yes
+  loop: '{{ lookup("fileglob", "../files/*", wantlist=True )}}'
+
+- import_tasks: ./config.yml

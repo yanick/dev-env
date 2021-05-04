@@ -1,0 +1,43 @@
+- name: Ubuntu dependencies
+  when: ansible_facts['distribution'] == 'Ubuntu'
+  become: yes
+  apt:
+    force_apt_get: yes
+    name:
+      - libgl1-mesa-dev
+      - libxkbcommon-x11-dev
+      - libdbus-1-dev
+      - libxcursor-dev
+      - libxrandr-dev
+      - libxi-dev
+      - libxinerama-dev
+      - libfontconfig-dev
+      - libpython3-dev
+          # actually version is not high enough
+      - wayland-protocols
+      - wayland-scanner++
+      - libharfbuzz-dev
+      - libwayland-dev
+      - liblcms2-dev
+
+- name: create work directory
+  file:
+    path: '{{kitty_dir}}'
+    state: directory
+
+- name: Git cloning
+  git:
+    dest: '{{kitty_dir}}'
+    repo: https://github.com/kovidgoyal/kitty
+    force: no
+    version: v{{kitty_target_version}}
+
+- name: compile kitty
+  command: make chdir={{kitty_dir}}
+
+- name: plop kitty in the bin
+  file:
+    path: '{{ansible_env.HOME}}/.local/bin/kitty'
+    src: '{{kitty_dir}}/kitty/launcher/kitty'
+    state: link
+    mode: a+rx

@@ -1,0 +1,10 @@
+- name: navigate windows for Model-01
+  lineinfile:
+    path: '{{ansible_user_dir}}/.config/kitty/kitty.conf'
+    line: map {{item.key}} {{item.value}}
+    regex: map {{item.key| regex_escape() }}
+  loop: "{{ mappings | dict2items }}"
+  vars:
+    mappings:
+      'ctrl+shift+p': neighboring_window right
+      'ctrl+shift+o': neighboring_window left

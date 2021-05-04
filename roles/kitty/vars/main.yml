@@ -1,0 +1,2 @@
+kitty_target_version: "0.20.2"
+kitty_dir: '{{ansible_env.HOME}}/.local/kitty'

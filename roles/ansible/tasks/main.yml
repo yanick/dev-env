@@ -1,0 +1,5 @@
+- name: ansiplay
+  copy:
+    dest: '{{ansible_env.HOME}}/bin/ansiplay'
+    mode:  u+wrx
+    src: ../files/ansiplay

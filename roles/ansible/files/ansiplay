@@ -1,0 +1,29 @@
+#!/usr/bin/env fish
+
+# always wanted Ansible to be --check by default.
+# Well, through the magic of arg munging, it can be!
+# add `--check --diff` to all commands, unless it ends
+# with GO
+# E.g.,
+#    ansiplay playbooks/foo.yml    # --check and --diff added
+#    ansiplay playbooks/foo.yml GO # GO removed and playbook ran fo' realz
+
+# also added `!@` as a shortcut for --skip-tags. Because lazy.
+
+# --changes for ANSIBLE_DISPLAY_OK_HOSTS=false
+
+set argv ( echo $argv | perl -pe 's/\@!/--skip-tags /' )
+set argv ( echo $argv | perl -pe 's/GO// or s/$/ --check --diff/' )
+
+set argv ( string split ' ' $argv )
+
+if contains changes $argv
+    set argv ( string join \n -- $argv | grep -v -- changes )
+    set ANSIBLE_DISPLAY_OK_HOSTS false
+    set ANSIBLE_DISPLAY_SKIPPED_HOSTS false
+end
+
+
+eval ANSIBLE_DISPLAY_OK_HOSTS=$ANSIBLE_DISPLAY_OK_HOSTS \
+    ANSIBLE_DISPLAY_SKIPPED_HOSTS=$ANSIBLE_DISPLAY_SKIPPED_HOSTS \
+    ansible-playbook $argv

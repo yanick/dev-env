@@ -5,3 +5,4 @@
       - import_role: { name: colorpedia }
       - import_role: { name: ripgrep }
       - import_role: { name: kitty }
+      - import_role: { name: ansible }

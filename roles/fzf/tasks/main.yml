@@ -1,0 +1,9 @@
+- command_facts:
+    program: fzf
+    version_args: --version
+    target_version: '{{fzf_target_version}}'
+  register: installed
+
+- when: installed.needs_upgrade
+  include_tasks: ./install.yml
+

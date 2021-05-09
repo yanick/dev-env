@@ -1,0 +1,18 @@
+- file:
+    path: /tmp/ansible
+    state: directory
+
+- name: clone repo
+  git:
+    dest: /tmp/ansible/fzf
+    repo: https://github.com/junegunn/fzf.git
+    update: yes
+    version: '{{fzf_target_version}}'
+
+- name: copy fzf
+  copy:
+    dest: '{{install_prefix}}/bin/fzf'
+    src: /tmp/ansible/fzf/bin/fzf
+    remote_src: yes
+  become: '{{install_as_root}}'
+

@@ -6,3 +6,5 @@
       - import_role: { name: ripgrep }
       - import_role: { name: kitty }
       - import_role: { name: ansible }
+      - import_role: { name: fzf }
+

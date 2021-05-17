@@ -1,0 +1,5 @@
+- name: alias
+  git_config:
+    scope: global
+    name: alias.{{alias.key}}
+    value: '{{alias.value}}'

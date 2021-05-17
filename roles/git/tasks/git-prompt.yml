@@ -1,0 +1,16 @@
+- name: git-prompt
+  copy:
+    src: ../files/git-prompt
+    dest: '{{user_bin_path}}/git-prompt'
+    mode: u+x
+    force: no
+    backup: yes
+
+- name: get dependencies
+  shell: grep '# cpanm ' {{role_path}}/files/git-prompt | sed 's/# cpanm//'
+  register: deps
+
+- debug: var=deps
+
+- shell: '{{ansible_env.HOME}}/.plenv/shims/cpanm {{ deps.stdout }}'
+  args: { executable: '{{ user_shell_path }}' }

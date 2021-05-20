@@ -1,10 +1,11 @@
 - hosts: localhost
   tasks:
       - import_role: { name: jo }
+      - import_role: { name: fish }
       - import_role: { name: starship }
       - import_role: { name: colorpedia }
       - import_role: { name: ripgrep }
       - import_role: { name: kitty }
       - import_role: { name: ansible }
       - import_role: { name: fzf }
-
+        tags: fzf

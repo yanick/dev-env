@@ -7,3 +7,6 @@
 - when: installed.needs_upgrade
   include_tasks: ./install.yml
 
+- include_tasks: ./vim.yml
+  tags: vim
+  name: vim config

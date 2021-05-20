@@ -1,0 +1,21 @@
+- name: add fzf plugin
+  include_role: role=vim-plugged-plugin
+  vars:
+    plugin: '{{item}}'
+  loop:
+    - junegunn/fzf
+    - junegunn/fzf.vim
+
+- set_fact:
+    vim_maps:
+      'nmap <leader>ff': ':Files<CR>'
+      'nmap <leader>fb': ':Buffers<CR>'
+
+- name: add mappings
+  lineinfile:
+    path: '{{vimrc}}'
+    regexp: '{{item.key}}'
+    backup: yes
+    line: '{{item.key}} {{item.value}}'
+  loop: '{{ vim_maps | dict2items }}'
+

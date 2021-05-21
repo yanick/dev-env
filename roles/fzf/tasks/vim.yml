@@ -11,7 +11,7 @@
       'nmap <leader>ff': ':Files<CR>'
       'nmap <leader>fb': ':Buffers<CR>'
 
-- name: add mappings
+- name: mappings
   lineinfile:
     path: '{{vimrc}}'
     regexp: '{{item.key}}'
@@ -19,3 +19,11 @@
     line: '{{item.key}} {{item.value}}'
   loop: '{{ vim_maps | dict2items }}'
 
+- name: file path completion
+  blockinfile:
+    backup: yes
+    path: '{{vimrc}}'
+    marker_begin: '{{ "{{{" }}'
+    marker_end: '}}}'
+    marker: '" {mark} fzf file path completion'
+    block: "{{ lookup('file', '../files/file-completion.vim') }}"

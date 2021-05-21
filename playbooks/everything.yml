@@ -9,3 +9,5 @@
       - import_role: { name: ansible }
       - import_role: { name: fzf }
         tags: fzf
+      - import_role: { name: vim-misc }
+        tags: vim

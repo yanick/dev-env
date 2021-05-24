@@ -1,5 +1,6 @@
 - lineinfile:
     backup: yes
     line: Plug '{{plugin}}'{{ additional_args }}
+    regex: Plug '{{plugin}}'
     insertbefore: call plug#end
     path: "{{vimrc}}"

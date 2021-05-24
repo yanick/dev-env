@@ -1,0 +1,5 @@
+- name: nvim shortcut
+  lineinfile:
+    path: '{{ fish_config_file }}'
+    backup: yes
+    line: abbr vi nvim

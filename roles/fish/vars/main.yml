@@ -1,0 +1,1 @@
+fish_config_file: '{{ansible_env.HOME}}/.config/fish/config.fish'

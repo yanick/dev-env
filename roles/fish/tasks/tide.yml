@@ -1,0 +1,45 @@
+# TODO install tide
+# and configure tide
+
+# 18:25 yanick@enkidu ~/work/dev-env
+#       ?         ✎               fish
+# ⥼
+
+# https://github.com/IlanCosman/tide
+
+- name: tide, my way
+  copy:
+    dest: '{{ansible_env.HOME}}/.config/fish/functions/_tide_prompt.fish'
+    src: ../files/_tide_prompt.fish
+    backup: yes
+
+- name: tide_left_prompt_items
+  lineinfile:
+    path: '{{ansible_env.HOME}}/.config/fish/fish_variables'
+    regex: 'SETUVAR tide_left_prompt_items:'
+    line: SETUVAR tide_left_prompt_items:time\x1econtext\x1epwd\x1enewline\x1egit\x1enewline\x1evi_mode\x1eprompt_char
+    backup: yes
+
+- name: tide_context_always_display
+  lineinfile:
+    path: '{{ansible_env.HOME}}/.config/fish/fish_variables'
+    regex: 'SETUVAR tide_context_always_display:'
+    line: SETUVAR tide_context_always_display:true
+    backup: yes
+
+- name: enable the prompt
+  copy:
+    dest: '{{ansible_env.HOME}}/.config/fish/functions/fish_prompt.fish'
+    src: ../files/fish_prompt.fish
+
+# set -U tide_time_format %H:%M
+
+# set -x tide_time_color 008787  # cyan
+
+# set -U tide_git_branch_color --bold $solarized_blue
+
+# set -U tide_git_upstream_color --bold $solarized_green
+
+# set -U tide_git_stash_color --dim $solarized_green
+
+# set -U tide_git_dirty_color --bold $solarized_orange

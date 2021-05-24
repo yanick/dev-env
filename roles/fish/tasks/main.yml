@@ -1,0 +1,30 @@
+- command_facts:
+    program: fish
+    version_args: --version
+    target_version: 3.2.2
+  register: version
+  ignore_errors: true
+  check_mode: no
+
+- when: version.needs_upgrade
+  include_tasks: ./build.yml
+
+- name: solarized
+  copy:
+    dest: '{{ansible_env.HOME}}/.config/fish/functions/fish_solarized.fish'
+    src: ../files/solarized.fish
+
+- name: was solarized run?
+  shell: set --names | grep solarized
+  args:
+    executable: /usr/local/bin/fish
+  register: solar_var
+  check_mode: no
+
+- when: solar_var.stdout == ""
+  shell: solarized set
+  args:
+    executable: /usr/local/bin/fish
+
+- include_tasks: ./config.yml
+  tags: vim

@@ -1,0 +1,28 @@
+- file:
+    path: /tmp/ansible
+    state: directory
+
+- name: get the code
+  unarchive:
+    src: https://github.com/fish-shell/fish-shell/releases/download/3.2.2/fish-3.2.2.tar.xz
+    dest: /tmp/ansible/
+    remote_src: yes
+    creates: /tmp/ansible/fish-3.2.2/cmake
+
+- shell: cmake .
+  name: cmake'ing
+  args:
+    chdir: /tmp/ansible/fish-3.2.2
+    creates: /tmp/ansible/fish-3.2.2/Makefile
+
+- shell: make
+  name: make'ing
+  args:
+    chdir: /tmp/ansible/fish-3.2.2
+
+- shell: make install
+  become: yes
+  name: installing
+  args:
+    chdir: /tmp/ansible/fish-3.2.2
+

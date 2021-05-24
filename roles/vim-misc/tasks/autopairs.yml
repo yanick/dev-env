@@ -1,0 +1,29 @@
+- name: import plugin
+  import_role: name=vim-plugged-plugin
+  vars:
+    plugin: lunarWatcher/auto-pairs
+
+- name: fly mode
+  lineinfile:
+    path: '{{vimrc}}'
+    regexp: let g:AutoPairsFlyMode
+    backup: yes
+    line: let g:AutoPairsFlyMode = 1
+
+- name: brace shortcuts
+  blockinfile:
+    state: absent
+    path: "{{vimrc}}"
+    backup: yes
+    marker: '" {mark} brace shortcuts'
+    marker_begin: "{{ '{{{' }}"
+    marker_end: '}}}'
+    block: |
+      inoremap (( ()<C-c>i
+      inoremap [[ []<C-c>i
+      inoremap \{\{ {}<C-c>i
+
+      inoremap ((( (<CR>)<C-c>O
+      inoremap [[[ [<CR>]<C-c>O
+      inoremap \{\{\{ {<CR>}<C-c>O
+

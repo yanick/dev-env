@@ -4,23 +4,6 @@
   vars:
     plugin: tpope/vim-vinegar
 
-- name: brace shortcuts
-  blockinfile:
-    path: "{{ansible_user_dir}}/.config/nvim/init.vim"
-    backup: yes
-    marker: '" {mark} brace shortcuts'
-    marker_begin: "{{ '{{{' }}"
-    marker_end: '}}}'
-    block: |
-      inoremap (( ()<C-c>i
-      inoremap [[ []<C-c>i
-      inoremap \{\{ {}<C-c>i
-
-      inoremap ((( (<CR>)<C-c>O
-      inoremap [[[ [<CR>]<C-c>O
-      inoremap \{\{\{ {<CR>}<C-c>O
-
-
 - name: ultisnip
   include_role: { name: vim-plugged-plugin }
   vars:
@@ -51,3 +34,7 @@
     marker_begin: "{{ '{{{' }}"
     marker_end: '}}}'
     block: "{{ lookup('file', '../files/line-numbers.vim' ) }}"
+
+- name: auto-pairs
+  import_tasks: ./autopairs.yml
+  tags: autopairs

@@ -1,9 +1,23 @@
-- name: copy cheat.fish
+# - name: copy cheat.fish
+#   copy:
+#     dest: '{{ansible_env.HOME}}/.config/fish/functions/cheat.fish'
+#     src: ../files/cheat.fish
+#     force: no
+#     backup: yes
+
+- name: no more function
+  file:
+    state: absent
+    path: '{{ansible_env.HOME}}/.config/fish/functions/cheat.fish'
+
+- name: install command
+  become: '{{install_as_root}}'
+  tags:
+    - become
   copy:
-    dest: '{{ansible_env.HOME}}/.config/fish/functions/cheat.fish'
-    src: ../files/cheat.fish
-    force: no
-    backup: yes
+    dest: '{{install_prefix}}/bin/cheat'
+    src: ../files/cheat
+    mode: +x
 
 - name: define env variable CHEATSHEETS_DIR
   lineinfile:

@@ -1,0 +1,71 @@
+function cheat
+
+    if test -z $CHEATSHEETS_DIR
+        echo "CHEATSHEETS_DIR is not defined"
+        return 1
+    end
+
+    set -l command $argv[1]
+
+    if test "$command" = 'get'
+        _cheat_get $argv[2..-1]
+    else if test "$command" = 'list'
+        _cheat_list
+    else
+        _cheat_query $argv
+    end
+
+
+end
+
+function _cheat_list
+    rg '^```.*cheat:' $CHEATSHEETS_DIR --no-heading \
+        | perl -pe's#$ENV{CHEATSHEETS_DIR}##;' \
+                -e's#```.*?cheat:##;s#\.md##'
+end
+
+function _cheat_query
+
+    set -l query ""
+
+    if test (count $argv) -gt 0
+        set query ( string join " " $argv )
+    end
+
+    set -l selection ( \
+        cheat list \
+            | fzf --preview="cheat get {}" -q $query \
+    )
+
+    set -l cheat (cheat get $selection | string trim -c " \n")
+
+    set_color red; echo -e "\n" $cheat[1] "\n"; set_color normal;
+
+    set -l cheat ( string join '\n' $cheat[2..-1] )
+
+    echo -e $cheat
+
+    echo -e $cheat | xclip -selection clipboard
+
+end
+
+function _cheat_get
+
+    perl -e '
+my( $file, $text ) = split /:\s*/, shift, 2;
+
+open my $fh, "<", $ENV{CHEATSHEETS_DIR}."/$file.md"
+    or die $!;
+
+my $line = 0;
+
+while(<$fh>) {
+    next unless /cheat:\s*\Q$text/.../```/;
+
+    exit if /^```$/;
+
+    print;
+}
+' $argv
+
+end

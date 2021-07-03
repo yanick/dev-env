@@ -1,0 +1,13 @@
+- name: copy cheat.fish
+  copy:
+    dest: '{{ansible_env.HOME}}/.config/fish/functions/cheat.fish'
+    src: ../files/cheat.fish
+    force: no
+    backup: yes
+
+- name: define env variable CHEATSHEETS_DIR
+  lineinfile:
+    path: '{{ansible_env.HOME}}/.config/fish/config.fish'
+    line: set -x CHEATSHEETS_DIR {{ cheatsheets_dir }}
+    backup: yes
+

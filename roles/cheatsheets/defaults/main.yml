@@ -1,0 +1,1 @@
+cheatsheets_dir: '{{ansible_env.HOME}}/vimwiki/cheatsheets/'

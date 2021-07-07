@@ -1,0 +1,24 @@
+- file:
+    path: /tmp/ansible
+    state: directory
+
+- set_fact:
+    download_url: https://github.com/dandavison/delta/releases/download/{{delta_target_version}}/delta-{{delta_target_version}}-x86_64-apple-darwin.tar.gz
+
+- name: download git-delta
+  get_url:
+    url: https://github.com/dandavison/delta/releases/download/0.8.2/delta-0.8.2-x86_64-apple-darwin.tar.gz
+    dest: /tmp/ansible/delta-0.8.2-x86_64-apple-darwin.tar.gz
+    validate_certs: no
+
+- name: untar
+  shell: tar -zxf delta-0.8.2-x86_64-apple-darwin.tar.gz
+  args:
+    chdir: /tmp/ansible
+    creates: /tmp/ansible/delta-0.8.2-x86_64-apple-darwin/delta
+
+- copy:
+    remote_src: yes
+    src: /tmp/ansible/delta-0.8.2-x86_64-apple-darwin/delta
+    dest: /usr/local/bin/delta
+    mode: +x

@@ -1,0 +1,13 @@
+- file:
+    path: /tmp/ansible
+    state: directory
+
+- name: download deb
+  get_url:
+    url: https://github.com/dandavison/delta/releases/download/{{delta_target_version}}/git-delta_{{delta_target_version}}_amd64.deb
+    dest: /tmp/ansible/git-delta_{{delta_target_version}}_amd64.deb
+
+- name: install deb
+  become: yes
+  apt:
+    deb: /tmp/ansible/git-delta_{{delta_target_version}}_amd64.deb

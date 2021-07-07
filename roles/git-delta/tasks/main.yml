@@ -1,0 +1,29 @@
+# https://github.com/dandavison/delta
+
+- command_info:
+    command_name: delta
+    target_version: '{{delta_target_version}}'
+  register: installed_delta
+
+- debug: var=installed_delta
+
+- when: installed_delta.needs_upgrade
+  include_tasks: ./install-{{ansible_os_family}}.yml
+
+- git_config:
+    scope: global
+    name: '{{item.key}}'
+    value: '{{item.value}}'
+  loop: '{{ config | dict2items }}'
+  vars:
+    config:
+      pager.diff: delta
+      pager.log: delta
+      pager.reflog: delta
+      pager.show: delta
+      "delta.syntax-theme": "Monokai Light Extended"
+      "delta.navigate": "true"
+      "delta.line-numbers": "true"
+      "delta.side-by-side": "true"
+      "interactive.diffFilter": "delta --color-only"
+

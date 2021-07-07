@@ -1,0 +1,6 @@
+- when: ansible_os_family == 'Debian'
+  import_tasks: ./install-deb.yml
+
+- when: ansible_os_family == 'Darwin'
+  import_tasks: ./install-darwin.yml
+
